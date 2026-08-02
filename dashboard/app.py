@@ -1,7 +1,7 @@
 """
-app.py — RakuFlow Analytics Streamlit Dashboard.
+app.py — FlowMetrics Analytics Streamlit Dashboard.
 
-Provides real-time e-commerce analytics powered by the RakuFlow data pipeline:
+Provides real-time e-commerce analytics powered by the FlowMetrics data pipeline:
     - KPI cards: Total Orders, Total GMV, Avg Delivery Days, Active Sellers
     - Daily GMV trend (line chart)
     - Top 10 sellers by revenue (bar chart)
@@ -27,8 +27,8 @@ from streamlit_autorefresh import st_autorefresh
 
 # ── Page config ────────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="RakuFlow Analytics",
-    page_icon="⚡",
+    page_title="FlowMetrics Analytics",
+    page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -94,10 +94,17 @@ st.markdown(
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* Sidebar */
+        /* Sidebar — white background, black text */
         section[data-testid="stSidebar"] {
-            background: rgba(15, 12, 41, 0.9);
-            border-right: 1px solid rgba(255,255,255,0.1);
+            background: #ffffff;
+            border-right: 1px solid rgba(0,0,0,0.1);
+        }
+        section[data-testid="stSidebar"] * {
+            color: #111111 !important;
+        }
+        section[data-testid="stSidebar"] .stMarkdown p,
+        section[data-testid="stSidebar"] h3 {
+            color: #111111 !important;
         }
 
         /* Remove default padding */
@@ -426,9 +433,9 @@ def render_sidebar() -> tuple[date, date, Optional[str]]:
         st.markdown(
             """
             <div style="text-align:center; padding: 1rem 0 1.5rem;">
-                <div style="font-size:2.5rem;">⚡</div>
-                <div style="font-size:1.4rem; font-weight:700; color:white;">RakuFlow</div>
-                <div style="font-size:0.78rem; color:rgba(255,255,255,0.5); letter-spacing:0.1em;">
+                <div style="font-size:2.5rem;">📊</div>
+                <div style="font-size:1.4rem; font-weight:700; color:#111111;">FlowMetrics</div>
+                <div style="font-size:0.78rem; color:rgba(0,0,0,0.5); letter-spacing:0.1em;">
                     ANALYTICS PLATFORM
                 </div>
             </div>
@@ -465,7 +472,7 @@ def render_sidebar() -> tuple[date, date, Optional[str]]:
         st.markdown("---")
         st.markdown(
             """
-            <div style="font-size:0.72rem; color:rgba(255,255,255,0.35); text-align:center;">
+            <div style="font-size:0.72rem; color:rgba(0,0,0,0.45); text-align:center;">
                 Powered by Apache Kafka · PySpark · dbt<br>
                 Streaming live data (refreshes every 5 seconds)
             </div>
@@ -679,7 +686,7 @@ def chart_delivery_by_state(df: pd.DataFrame) -> go.Figure:
 # ── Main ───────────────────────────────────────────────────────────────────────
 
 def main() -> None:
-    """Render the full RakuFlow Analytics Streamlit dashboard."""
+    """Render the full FlowMetrics Analytics Streamlit dashboard."""
     # Stream live data: automatically refresh the dashboard every 5 seconds
     st_autorefresh(interval=5000, key="live_data_refresh")
 
@@ -691,13 +698,11 @@ def main() -> None:
         <h1 style="
             font-size: 2.2rem;
             font-weight: 800;
-            background: linear-gradient(90deg, #845adf, #38bdf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #ffffff;
             margin-bottom: 0.2rem;
-        ">⚡ RakuFlow Analytics</h1>
+        ">📊 FlowMetrics Analytics</h1>
         <p style="color:rgba(255,255,255,0.5); font-size:0.9rem; margin-bottom: 1.5rem;">
-            Real-time e-commerce intelligence · Olist Brazil Dataset · Powered by Kafka + PySpark + dbt
+            Real-time e-commerce intelligence · Powered by Kafka + PySpark + dbt
         </p>
         """,
         unsafe_allow_html=True,
@@ -778,7 +783,7 @@ def main() -> None:
                 color: rgba(255,255,255,0.3);
                 text-align: center;
             ">
-                RakuFlow · Built for Rakuten Japan Internship Application ·
+                FlowMetrics · E-Commerce Data Pipeline ·
                 Last refreshed: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}
             </div>
             """,
