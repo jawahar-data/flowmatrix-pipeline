@@ -6,7 +6,7 @@
 >![RakuFlow Dashboard Overview](assets/dashboard_overview.png)
 
 >### Top 10 Sellers · Avg Delivery Days by State
->![RakuFlow Charts](assets/dashboard-charts.png)
+>![RakuFlow Charts](assets/Screenshot 2026-08-02 203140.png)
 
 > A Rakuten-scale, fully Dockerized, end-to-end data engineering platform for e-commerce order analytics — built with Apache Kafka, PySpark, Apache Airflow, dbt, PostgreSQL, Great Expectations, and Streamlit.
 
