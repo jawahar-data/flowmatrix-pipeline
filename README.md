@@ -3,7 +3,7 @@
 > 🔴 **Live Demo**: [https://rakuflow.streamlit.app](https://rakuflow.streamlit.app)  
 > _(Dashboard fully cloud-hosted on Streamlit Community Cloud and powered by Neon Serverless PostgreSQL)_
 > ### KPI Cards · Daily GMV · Order Status
->![RakuFlow Dashboard Overview](assets/dashboard_overview.png)
+>![RakuFlow Dashboard Overview](assets/Screenshot 2026-08-02 203209.png)
 
 >### Top 10 Sellers · Avg Delivery Days by State
 >![RakuFlow Charts](assets/Screenshot 2026-08-02 203140.png)
