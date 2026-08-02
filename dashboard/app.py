@@ -46,9 +46,9 @@ st.markdown(
             color: #ffffff !important;
         }
 
-        /* Dark gradient background */
+        /* Solid black background */
         .stApp {
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background: #000000;
         }
 
         /* Metric cards */
