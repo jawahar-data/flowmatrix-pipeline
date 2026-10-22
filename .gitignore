@@ -74,3 +74,10 @@ live_demo.py
 
 # ── Linter caches ────────────────────────────────────────────────────────────────
 .ruff_cache/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
