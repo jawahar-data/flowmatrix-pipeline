@@ -1,8 +1,10 @@
-import sys, time, pathlib, boto3
+import re, sys, time, pathlib, boto3
 
 REGION = "ap-southeast-2"
-OUTPUT = "s3://flowmatrix-lake-418059030267/athena-results/"
+BUCKET = "flowmatrix-lake-418059030267"
+OUTPUT = f"s3://{BUCKET}/athena-results/"
 athena = boto3.client("athena", region_name=REGION)
+s3 = boto3.client("s3", region_name=REGION)
 
 
 def run(sql, name):
@@ -20,7 +22,26 @@ def run(sql, name):
     print(f"OK {name}")
 
 
+def empty_prefix(prefix):
+    # Safety guard: only silver/ and gold/ may ever be wiped, never bronze
+    assert prefix.startswith(("silver/", "gold/")), f"refusing to delete {prefix}"
+    for page in s3.get_paginator("list_objects_v2").paginate(Bucket=BUCKET, Prefix=prefix):
+        keys = [{"Key": o["Key"]} for o in page.get("Contents", [])]
+        if keys:
+            s3.delete_objects(Bucket=BUCKET, Delete={"Objects": keys})
+
+
+def reset_if_ctas(sql, name):
+    table = re.search(r"CREATE TABLE\s+(\S+)", sql, re.I)
+    loc = re.search(r"external_location\s*=\s*'s3://[^/]+/([^']+)'", sql, re.I)
+    if table and loc:
+        run(f"DROP TABLE IF EXISTS {table.group(1)}", f"drop {table.group(1)}")
+        empty_prefix(loc.group(1))
+
+
 folders = sys.argv[1:] or ["sql"]
 for folder in folders:
     for f in sorted(pathlib.Path(folder).rglob("*.sql")):
-        run(f.read_text(), str(f))
+        sql = f.read_text()
+        reset_if_ctas(sql, str(f))
+        run(sql, str(f))
