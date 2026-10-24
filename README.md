@@ -1,6 +1,23 @@
 # ⚡ FlowMatrix
 ![CI](https://github.com/j26219096-prog/flowmatrix-pipeline/actions/workflows/ci.yml/badge.svg)
 ![SQL Checks](https://github.com/j26219096-prog/flowmatrix-pipeline/actions/workflows/sql-validation.yml/badge.svg)
+## Cloud Data Lake (AWS)
+
+Medallion architecture on S3, queried with Athena, defined as code.
+
+| Layer | Format | Purpose |
+|-------|--------|---------|
+| bronze | raw CSV | Olist files as received |
+| silver | typed Parquet | Cleaned, casted, columnar |
+| gold | Parquet | Business tables for the dashboard |
+
+- Infrastructure: Terraform (`infra/`), private, versioned, encrypted S3 bucket
+- Transformations: Athena SQL (`sql/`), applied in order by `scripts/run_athena_sql.py`
+- Rebuilds are idempotent: running the script twice gives the same result
+- CI validates the SQL layer on every push
+- Data quality: row counts reconciled between bronze and silver (99,441 orders)
+- Query efficiency: a gold query scans under 1 KB, versus about 17 MB on the raw CSVs
+- 
 ### End-to-End E-Commerce ELT Pipeline
 
 FlowMatrix is a personal data engineering project that demonstrates a complete, production-patterned ELT pipeline for e-commerce order analytics. It covers real-time stream ingestion, distributed transformation, analytics engineering, workflow orchestration, automated data quality validation, and a live dashboard.
