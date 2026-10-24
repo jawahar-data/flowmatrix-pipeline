@@ -1,6 +1,6 @@
 # ⚡ FlowMatrix
 ![CI](https://github.com/j26219096-prog/flowmatrix-pipeline/actions/workflows/ci.yml/badge.svg)
-![SQL Checks](https://github.com/j26219096-prog/flowmatrix-pipeline/actions/workflows/sql-validation.yml/badge.svg)
+![SQL Checks](https://github.com/j26219096-prog/flowmatrix-pipeline/actions/workflows/sql-checks.yml/badge.svg)
 ## Cloud Data Lake (AWS)
 
 Medallion architecture on S3, queried with Athena, defined as code.
