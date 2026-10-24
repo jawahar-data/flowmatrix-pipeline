@@ -1,5 +1,6 @@
 # ⚡ FlowMatrix
-
+![CI](https://github.com/j26219096-prog/flowmatrix-pipeline/actions/workflows/ci.yml/badge.svg)
+![SQL Checks](https://github.com/j26219096-prog/flowmatrix-pipeline/actions/workflows/sql-validation.yml/badge.svg)
 ### End-to-End E-Commerce ELT Pipeline
 
 FlowMatrix is a personal data engineering project that demonstrates a complete, production-patterned ELT pipeline for e-commerce order analytics. It covers real-time stream ingestion, distributed transformation, analytics engineering, workflow orchestration, automated data quality validation, and a live dashboard.
