@@ -81,3 +81,4 @@ live_demo.py
 *.tfstate.*
 *.tfvars
 crash.log
+.streamlit/secrets.toml

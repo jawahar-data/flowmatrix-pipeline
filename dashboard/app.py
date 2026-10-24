@@ -24,6 +24,10 @@ import plotly.graph_objects as go
 import streamlit as st
 from sqlalchemy import create_engine, text
 from streamlit_autorefresh import st_autorefresh
+try:
+    from dashboard import athena_source as lake
+except ImportError:  # app.py is run from inside dashboard/
+    import athena_source as lake
 
 # ── Page config ────────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -222,7 +226,7 @@ def _demo_top_sellers() -> pd.DataFrame:
     cities = ["São Paulo", "Rio de Janeiro", "Belo Horizonte", "Porto Alegre",
               "Curitiba", "Florianópolis", "Salvador", "Goiânia", "Recife", "Fortaleza"]
     return pd.DataFrame({
-        "seller_id": [str(uuid.UUID(int=rng.integers(0, 2**128))) for _ in range(10)],
+        "seller_id": [str(uuid.UUID(bytes=rng.bytes(16))) for _ in range(10)],
         "city": cities, "state": states,
         "total_orders": rng.integers(20, 200, 10),
         "total_revenue": rng.uniform(5000, 80000, 10).round(2),
@@ -270,6 +274,8 @@ def load_daily_gmv(start_date: date, end_date: date) -> pd.DataFrame:
     Returns:
         DataFrame with columns: order_date, total_orders, total_gmv, avg_payment_value.
     """
+    if lake.enabled():
+        return lake.daily_gmv(start_date, end_date)
     if not _db_available():
         df = _demo_daily_gmv()
         return df[(df["order_date"] >= start_date) & (df["order_date"] <= end_date)]
@@ -688,7 +694,8 @@ def chart_delivery_by_state(df: pd.DataFrame) -> go.Figure:
 def main() -> None:
     """Render the full FlowMetrics Analytics Streamlit dashboard."""
     # Stream live data: automatically refresh the dashboard every 5 seconds
-    st_autorefresh(interval=5000, key="live_data_refresh")
+    if not lake.enabled():
+        st_autorefresh(interval=5000, key="live_data_refresh")
 
     start_date, end_date, state_filter = render_sidebar()
 
@@ -709,7 +716,9 @@ def main() -> None:
     )
 
     # Demo mode banner
-    if not _db_available():
+    if lake.enabled():
+        st.caption("Data source: AWS Athena · gold layer of the S3 data lake")
+    elif not _db_available():
         st.info(
             "📊 **Demo Mode** — Showing sample data. "
             "Connect a PostgreSQL database via [Streamlit secrets](https://docs.streamlit.io/deploy/streamlit-community-cloud/deploy-your-app/secrets-management) "
