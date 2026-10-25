@@ -717,7 +717,11 @@ def main() -> None:
 
     # Demo mode banner
     if lake.enabled():
-        st.caption(":green[Data source: AWS Athena · gold layer of the S3 data lake]")
+        st.markdown(
+            "<p style='font-size:0.8rem; color:#4ade80 !important; margin:0 0 0.5rem;'>"
+            "Data source: AWS Athena · gold layer of the S3 data lake</p>",
+            unsafe_allow_html=True,
+        )
     elif not _db_available():
         st.info(
             "📊 **Demo Mode** — Showing sample data. "
